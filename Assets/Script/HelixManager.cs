@@ -6,11 +6,16 @@ public class HelixManager : MonoBehaviour
 { public GameObject [] helixRings;
 public float yAxisSpawn = 0;
 public float ringsDistance = 5;
-public int numberOfRings = 7;
+public int numberOfRings ;
 public GameObject BaseCylinder;
+public static int numberOfPassedRings;
 
     void Start()
-    {   // In this place we are spawning the helix rings in prefab randumly
+
+    {   numberOfRings = GameManager.currentLevelIndex +5;
+ numberOfPassedRings =0;
+         // In this place we are spawning the helix rings in prefab randumly
+
          for (int i = 0; i < numberOfRings; i++){ 
             
             if(i ==0){ 
@@ -40,4 +45,5 @@ public GameObject BaseCylinder;
     
 
 }
+
 
