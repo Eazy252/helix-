@@ -9,25 +9,21 @@ using UnityEngine.EventSystems;
 public class GameManager : MonoBehaviour
 {
 
-    public static bool gameOver;
-    public static bool levelCompleted;
-    public static int numberofPassedRings;
+    public static bool gameOver, levelCompleted;
+  
+    public static int numberofPassedRings, currentLevelIndex;
     public static bool isGameStarted = false;
 
+    public static int score = 0;
 
-    public static int currentLevelIndex;
-    public TextMeshProUGUI currentLeveltext;
-    public TextMeshProUGUI nextLeveltext; 
+    public TextMeshProUGUI currentLeveltext, nextLeveltext, scoreText, highScoreText;
+   // public TextMeshProUGUI nextLeveltext; 
     public Slider gameProgressSlider;
     
 
     public static bool mute = false;
 
-    public  GameObject gamePlayPanel;
-    public  GameObject startmenuPanel;
-
-    public GameObject gameOverText; 
-    public GameObject levelCompletedText;
+    public  GameObject gamePlayPanel, startmenuPanel, gameOverText,levelCompletedText;
 
     private void Awake() {
         currentLevelIndex = PlayerPrefs.GetInt("currentLevelIndex", 0);
@@ -40,6 +36,7 @@ public class GameManager : MonoBehaviour
         gameOver = levelCompleted = false;
         Time.timeScale = 1;
         numberofPassedRings =0;
+        highScoreText.text = "High Score\n" + PlayerPrefs.GetInt("HighScore",0);
         isGameStarted = gameOver = levelCompleted = false;
     }
 
@@ -49,8 +46,18 @@ public class GameManager : MonoBehaviour
         int progress = numberofPassedRings * 100 / FindObjectOfType<HelixManager>().numberOfRings;
         gameProgressSlider.value = progress;
 
-        if(Input.GetMouseButtonDown(0) && !isGameStarted){ 
-            if(EventSystem.current.IsPointerOverGameObject())
+        scoreText.text = score.ToString();
+
+
+        //Start Level
+        //(Input.GetMouseButtonDown(0) for PC 
+        
+        if(
+             
+                ( (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+                          ) && !isGameStarted)
+        { 
+            if(EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
             return;
             isGameStarted = true;
             gamePlayPanel.SetActive(true);
@@ -61,7 +68,11 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0;
             gameOverText.SetActive(true);
             if(Input.GetButtonDown("Fire1"))
-            { 
+            {  
+                if(score >  PlayerPrefs.GetInt("HighScore",0)){ 
+                    PlayerPrefs.SetInt("HighScore", score);
+                }
+                 score =0;
                 SceneManager.LoadScene("Level");
             }
         }
