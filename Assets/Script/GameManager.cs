@@ -17,13 +17,16 @@ public class GameManager : MonoBehaviour
     public static int score = 0;
 
     public TextMeshProUGUI currentLeveltext, nextLeveltext, scoreText, highScoreText;
-   // public TextMeshProUGUI nextLeveltext; 
+   
     public Slider gameProgressSlider;
     
 
     public static bool mute = false;
 
-    public  GameObject gamePlayPanel, startmenuPanel, gameOverText,levelCompletedText;
+    public  GameObject gamePlayPanel;
+     public  GameObject startmenuPanel;
+      public  GameObject gameOverText;
+       public  GameObject levelCompletedText;
 
     private void Awake() {
         currentLevelIndex = PlayerPrefs.GetInt("currentLevelIndex", 0);
@@ -50,14 +53,16 @@ public class GameManager : MonoBehaviour
 
 
         //Start Level
-        //(Input.GetMouseButtonDown(0) for PC 
+        //(Input.GetMouseButtonDown(0)  && !isGameStarted) for PC 
         
-        if(
-             
-                ( (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-                          ) && !isGameStarted)
+        if
+             (Input.GetMouseButtonDown(0)  && !isGameStarted)
+            //    ( 
+            //         (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+            //               ) )
+                
         { 
-            if(EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+            if(EventSystem.current.IsPointerOverGameObject()) // (Input.GetTouch(0).fingerId) for mobile 
             return;
             isGameStarted = true;
             gamePlayPanel.SetActive(true);
